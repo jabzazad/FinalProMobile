@@ -138,7 +138,7 @@ db.settings({
       </script>
         <script id="icon_template" type="text/template">
           <p style="text-align: center; margin-top: 10px;">
-              <ons-button onclick="scanQR()"><ons-icon icon="fa-camera"></ons-icon></ons-button>
+              <ons-button style="height:50px;margin-top:20px" onclick="scanQR()"><ons-icon style="margin-top:5px" icon="fa-qrcode"></ons-icon></ons-button>
               <ons-search-input placeholder="Search" onchange="Getsearch(this.value)"></ons-search-input>
             </p>
             <ons-carousel swipeable auto-scroll overscrollable id="carousel" style="height: 300px;">
@@ -205,7 +205,10 @@ db.settings({
   </template>
 </body>
 <script>
-  
+  if(localStorage.getItem("code")!=null){
+    Getsearch(localStorage.getItem("code"))
+    localStorage.removeItem("code");
+  }
  getHomeData();
  function scanQR(){
    window.location.href='scanQR.html';
@@ -324,6 +327,7 @@ db.collection("Cart").doc(""+pid+"").set({
 })
 .then(function() {
     console.log("Document successfully written!");
+    //bootbox
     bootbox.confirm({
     message: "Are you want continue shopping ?",
     buttons: {
