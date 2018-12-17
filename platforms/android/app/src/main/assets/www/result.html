@@ -69,7 +69,7 @@
     </ons-page>
 </body>
 <script>
-    getCar()
+getCar()
  function getCar(){
     var docRef = db.collection("User").doc(localStorage.getItem("code"));
     docRef.get().then(function(doc) {

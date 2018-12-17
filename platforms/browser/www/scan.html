@@ -1,189 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="cordova.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css" />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/onsenui/css/onsen-css-components.min.css"
-    />
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
     <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
     <script type="text/javascript" src="home.html"></script>
-    <link
-      rel="stylesheet"
-      href="https://use.fontawesome.com/releases/v5.4.2/css/all.css"
-      integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns"
-      crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns"
+        crossorigin="anonymous">
+        <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>
     <title>Scanner</title>
-  </head>
-  <style type="text/css">
+    <script> 
+            // Initialize Firebase
+            var config = {
+    apiKey: "AIzaSyDNxJ24X3up079PfQmdPOAxz3HyG3lRP0w",
+    authDomain: "psuregistration.firebaseapp.com",
+    databaseURL: "https://psuregistration.firebaseio.com",
+    projectId: "psuregistration",
+    storageBucket: "psuregistration.appspot.com",
+    messagingSenderId: "419447785809"
+  };
+            
+            firebase.initializeApp(config);
+            var db = firebase.firestore();
+          // Disable deprecated features
+          db.settings({
+            timestampsInSnapshots: true
+          });
+          </script>
+</head>
+<style type="text/css">
     .scanner-laser {
-      position: absolute;
-      margin: auto;
-      height: 50px;
-      width: 50px;
+        position: absolute;
+        margin: auto;
+        height: 50px;
+        width: 50px;
     }
 
     .solid-leftTop {
-      top: 0;
-      left: 0;
-      border-top: solid #4c5d47 5px;
-      border-left: solid #4c5d47 5px;
+        top: 0;
+        left: 0;
+        border-top: solid #4c5d47 5px;
+        border-left: solid #4c5d47 5px;
     }
 
     .solid-leftBottom {
-      bottom: 0;
-      left: 0;
-      border-bottom: solid #4c5d47 5px;
-      border-left: solid #4c5d47 5px;
+        bottom: 0;
+        left: 0;
+        border-bottom: solid #4c5d47 5px;
+        border-left: solid #4c5d47 5px;
     }
 
     .solid-rightTop {
-      top: 0;
-      right: 0;
-      border-top: solid #4c5d47 5px;
-      border-right: solid #4c5d47 5px;
+        top: 0;
+        right: 0;
+        border-top: solid #4c5d47 5px;
+        border-right: solid #4c5d47 5px;
     }
 
     .solid-rightBottom {
-      bottom: 0;
-      right: 0;
-      border-bottom: solid #4c5d47 5px;
-      border-right: solid #4c5d47 5px;
+        bottom: 0;
+        right: 0;
+        border-bottom: solid #4c5d47 5px;
+        border-right: solid #4c5d47 5px;
     }
-  </style>
-  <body>
-    <template id="alert-dialog.html">
-      <ons-alert-dialog id="my-alert-dialog" modifier="rowfooter">
-        <div class="alert-dialog-title">เพิ่มข้อมูลสำเร็จ</div>
-        <div class="alert-dialog-content">เลขป้ายทะเบียน:</div>
-        <div class="alert-dialog-content">จังหวัด:</div>
-        <div class="alert-dialog-content">เวลาที่เข้า:</div>
-        <div class="alert-dialog-footer">
-          <ons-alert-dialog-button onclick="hideAlertDialog()"
-            >OK</ons-alert-dialog-button
-          >
-        </div>
-      </ons-alert-dialog>
-    </template>
-    <div
-      style="position: relative;display: inline-block;margin-top:50% ;margin-left:6%  "
-    >
-      <canvas id="qr-canvas" width="320" height="240"></canvas>
-      <div class="scanner-laser solid-rightBottom" style="opacity: 0.75;"></div>
-      <div class="scanner-laser solid-rightTop" style="opacity: 0.75;"></div>
-      <div class="scanner-laser solid-leftBottom" style="opacity: 0.75;"></div>
-      <div class="scanner-laser solid-leftTop" style="opacity: 0.75;"></div>
+</style>
+<body>
+    <div style="position: relative;display: inline-block;margin-top:50% ;margin-left:6%  ">
+        <canvas id="qr-canvas" width="320" height="240"></canvas>
+        <div class="scanner-laser solid-rightBottom" style="opacity: 0.75;"></div>
+        <div class="scanner-laser solid-rightTop" style="opacity: 0.75;"></div>
+        <div class="scanner-laser solid-leftBottom" style="opacity: 0.75;"></div>
+        <div class="scanner-laser solid-leftTop" style="opacity: 0.75;"></div>
     </div>
-    <footer
-      class="fixed-bottom"
-      style="position: fixed;height: 65px;bottom: 0;width: 100%; background-color: black;"
-    >
-      <ons-button style="background-color:black; width: 30%;margin-top: 2px; ">
-        <i
-          id="light"
-          style="font-size: 50px; color:white;"
-          class="fas fa-lightbulb"
-          onclick="enableLight();"
-        ></i>
-      </ons-button>
-      <ons-button style="background-color:black; width: 30%; margin-top: 2px;">
-        <i
-          id="Swap"
-          style="font-size: 50px; color:white;"
-          class="fas fa-undo-alt"
-          onclick="swapCamera();"
-        ></i>
-      </ons-button>
-      <ons-button style="background-color:black; width: 30%;margin-top: 2px;">
-        <i
-          style="font-size: 50px; color:white;"
-          class="fas fa-times"
-          onclick="hideScanner();"
-        ></i>
-      </ons-button>
+    <footer class="fixed-bottom" style="position: fixed;height: 65px;bottom: 0;width: 100%; background-color: black;">
+        <ons-button style="background-color:black; width: 30%;margin-top: 2px; ">
+            <i id="light" style="font-size: 50px; color:white;" class="fas fa-lightbulb" onclick="enableLight();"></i>
+        </ons-button>
+        <ons-button style="background-color:black; width: 30%; margin-top: 2px;">
+            <i id="Swap" style="font-size: 50px; color:white;" class="fas fa-undo-alt" onclick="swapCamera();"></i>
+        </ons-button>
+        <ons-button style="background-color:black; width: 30%;margin-top: 2px;">
+            <i style="font-size: 50px; color:white;" class="fas fa-times" onclick="hideScanner();"></i>
+        </ons-button>
+        
     </footer>
     <script>
-      document.addEventListener("deviceready", onDeviceReady, false);
+        document.addEventListener("deviceready", onDeviceReady, false);
 
-      function onDeviceReady() {
-        // Start a scan. Scanning will continue until something is detected or
-        // QRScanner.cancelScan() is called.
-        QRScanner.scan(displayContents);
+        function onDeviceReady() {
+            // Start a scan. Scanning will continue until something is detected or
+            // QRScanner.cancelScan() is called.
+           QRScanner.scan(displayContents);
 
-        function displayContents(err, text) {
-          if (err) {
-            // an error occurred, or the scan was canceled (error code 6)
-          } else {
-            // The scan completed, display the contents of the QR code:
-            localStorage.setItem("code", text);
-            QRScanner.hide();
-            var dialog = document.getElementById("my-alert-dialog");
-            if (dialog) {
-              dialog.show();
-            } else {
-              ons
-                .createElement("alert-dialog.html", { append: true })
-                .then(function(dialog) {
-                  dialog.show();
-                });
+            function displayContents(err, text) {
+                if (err) {
+                    // an error occurred, or the scan was canceled (error code 6)
+                } else {
+                    getCar(text)
+                    // The scan completed, display the contents of the QR code:
+                    QRScanner.hide();
+
+                }
             }
-          }
+
+            // Make the webview transparent so the video preview is visible behind it.
+            QRScanner.show();
+            // Be sure to make any opaque HTML elements transparent here to avoid
+            // covering the video.
+        }
+        var lighton = 0;
+        var Trigger = 0;
+        function enableLight() {
+            if (lighton == 0) {
+                QRScanner.enableLight(function (err, status) {
+                    err && console.error(err);
+                    console.log(status);
+                });
+                document.getElementById("light").style.color = "yellow";
+                lighton = 1;
+            } else if (lighton == 1) {
+                QRScanner.disableLight(function (err, status) {
+                    err && console.error(err);
+                    console.log(status);
+                });
+                document.getElementById("light").style.color = "white";
+                lighton = 0;
+            }
         }
 
-        // Make the webview transparent so the video preview is visible behind it.
-        QRScanner.show();
-        // Be sure to make any opaque HTML elements transparent here to avoid
-        // covering the video.
-      }
-      var lighton = 0;
-      var Trigger = 0;
-      function enableLight() {
-        if (lighton == 0) {
-          QRScanner.enableLight(function(err, status) {
-            err && console.error(err);
-            console.log(status);
-          });
-          document.getElementById("light").style.color = "yellow";
-          lighton = 1;
-        } else if (lighton == 1) {
-          QRScanner.disableLight(function(err, status) {
-            err && console.error(err);
-            console.log(status);
-          });
-          document.getElementById("light").style.color = "white";
-          lighton = 0;
+        function getCar(text){
+            var docRef = db.collection("User").doc(text);
+            docRef.get().then(function(doc) {
+    if (doc.exists) {
+        var data=doc.data();
+      localStorage.setItem("lp",data.LicensPlate)
+      localStorage.setItem("pr",data.Province)
+      pushEntry()
+    } else {
+        // doc.data() will be undefined in this case
+        ons.notification.alert({message:"ไม่พบQR codeนี้",callback: function(answer){       
+    window.location.href = 'home.html';
+                    }
+                    })
+    }
+}).catch(function(error) {
+    console.log("Error getting document:", error);
+    })
+}
+        function pushEntry(){
+            db.collection("datadate").doc().set({
+  LicensPlate: localStorage.getItem("lp"),
+  Province:localStorage.getItem("pr"),
+  Time:Date()
+})  
+ons.notification.alert({message:"เลขป้ายทะเบียน:"+localStorage.getItem("lp")+"<br>จังหวัด:"+localStorage.getItem("pr")+"<br>เวลาที่เข้า:"+Date(),title:"เพิ่มข้อมูลสำเร็จ",buttonLabels:"ปิด",callback: function(answer){       
+    lighton = 1;
+    enableLight();
+    window.location.href = 'home.html';
+                    }})
         }
-      }
-      function hideScanner() {
-        QRScanner.hide();
-        lighton = 1;
-        Trigger = 1;
-        enableLight();
-        swapCamera();
-        window.location.href = "home.html";
-      }
-      function swapCamera() {
-        if (Trigger == 0) {
-          QRScanner.useFrontCamera(function(err, status) {
-            err && console.error(err);
-            console.log(status);
-          });
-          document.getElementById("Swap").style.color = "yellow";
-          Trigger = 1;
-        } else if (Trigger == 1) {
-          QRScanner.useBackCamera(function(err, status) {
-            err && console.error(err);
-            console.log(status);
-          });
-          document.getElementById("Swap").style.color = "white";
-          Trigger = 0;
+        function hideScanner() {
+            QRScanner.hide();
+            lighton = 1;
+            Trigger = 1;
+            enableLight();
+            swapCamera();
+            window.location.href = 'home.html'
         }
-      }
+        function swapCamera() {
+            if (Trigger == 0) {
+                QRScanner.useFrontCamera(function (err, status) {
+                    err && console.error(err);
+                    console.log(status);
+                });
+                document.getElementById("Swap").style.color = "yellow";
+                Trigger = 1;
+            } else if (Trigger == 1) {
+                QRScanner.useBackCamera(function (err, status) {
+                    err && console.error(err);
+                    console.log(status);
+                });
+                document.getElementById("Swap").style.color = "white";
+                Trigger = 0;
+            }
+        }
     </script>
-  </body>
+</body>
+
 </html>

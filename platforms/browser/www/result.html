@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Kanit" rel="stylesheet">
+    <title>Result</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>
+    <script> 
+            // Initialize Firebase
+            var config = {
+    apiKey: "AIzaSyDNxJ24X3up079PfQmdPOAxz3HyG3lRP0w",
+    authDomain: "psuregistration.firebaseapp.com",
+    databaseURL: "https://psuregistration.firebaseio.com",
+    projectId: "psuregistration",
+    storageBucket: "psuregistration.appspot.com",
+    messagingSenderId: "419447785809"
+  };
+            
+            firebase.initializeApp(config);
+            var db = firebase.firestore();
+          // Disable deprecated features
+          db.settings({
+            timestampsInSnapshots: true
+          });
+          </script>
+</head>
+
+<body>
+    <ons-page>
+        <ons-toolbar>
+            <div class="left" style="margin-left: 10px">
+                <a href="index.html">Back</a>
+            </div>
+            <div class="center">Owner Deatail</div>
+        </ons-toolbar>
+                
+        <ons-card>
+            <div class="title" style="text-align:center;">
+                <b>Car Detail</b>
+            </div>
+            <div style="font-size: 15pt;">
+                <ons-list-item id="cartype"></ons-list-item>
+                <ons-list-item id="brand"></ons-list-item>
+                <ons-list-item id="color"><b></ons-list-item>
+                <ons-list-item id="licens"></ons-list-item>
+                <ons-list-item id="province"></ons-list-item>
+            </div>
+        </ons-card>
+        <ons-card>
+            <div class="title" style="text-align:center;">
+                <b>Owner Detail</b>
+            </div>
+            <div style="font-size: 16pt;">
+                <ons-list-item id="type"></ons-list-item>
+                <ons-list-item id="name"></ons-list-item>
+                <ons-list-item id="tel"></ons-list-item>
+                <ons-list-item id="major"></ons-list-item>
+                <ons-list-item id="faculty"></ons-list-item>
+            </div>
+            
+        </ons-card>
+    </ons-page>
+</body>
+<script>
+getCar()
+ function getCar(){
+    var docRef = db.collection("User").doc(localStorage.getItem("code"));
+    docRef.get().then(function(doc) {
+    if (doc.exists) {
+        var data=doc.data();
+     document.getElementById("brand").innerHTML="<b>Brand:&nbsp;</b>"+data.Brand
+     document.getElementById("cartype").innerHTML=  "<b>Type:&nbsp;</b>"+data.Cartype
+     document.getElementById("color").innerHTML= "<b>Color:&nbsp;</b>"+data.Color
+     document.getElementById("faculty").innerHTML="<b>Faculty:&nbsp;</b>"+data.Faculty
+     document.getElementById("licens").innerHTML= "<b>Licens Plate:&nbsp;</b>"+data.LicensPlate
+     document.getElementById("major").innerHTML= "<b>Major:&nbsp;</b>"+data.Major
+     document.getElementById("name").innerHTML= "<b>Name:&nbsp;</b>"+data.Name
+     document.getElementById("province").innerHTML="<b>Province:&nbsp;</b>"+ data.Province
+     document.getElementById("tel").innerHTML="<b>Tel: " +data.Tel+"</b>"
+      document.getElementById("type").innerHTML="<b>Type:&nbsp;</b>"+data.Type
+    } else {
+        // doc.data() will be undefined in this case
+        ons.notification.alert({message:"ไม่พบQR codeนี้",callback: function(answer){       
+    window.location.href = 'home.html';
+                    }
+                    })
+
+    }
+}).catch(function(error) {
+    console.log("Error getting document:", error);
+    })
+}
+</script>
+</html>

@@ -93,13 +93,15 @@
                 .hide();
         };
         function search(){
-            var licensPlate = document.getElementById('licensPlate').value;
-            var province = document.getElementById('province').value;
+            var licensPlate = document.getElementById('licensPlate').value
+            localStorage.setItem("searchData1",licensPlate)
+            var province = document.getElementById('province').value
+            localStorage.setItem("searchData2",province)
             console.log("licensPlate: " + licensPlate);
             console.log("province: " + province);
             hideDialog('my-dialog');
             emptyString();
-            window.location.href = 'result.html';
+            window.location.href = 'result2.html';
         }
     </script>
 </body>

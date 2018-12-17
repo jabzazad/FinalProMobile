@@ -22,11 +22,11 @@
             </div>
         </ons-toolbar>
         <div style="margin: auto; right: 0; left: 0; position: absolute; width: 250px;">
-            <ons-button onclick="" class="button">
+            <ons-button onclick="scanQR();" class="button">
                 <div><img src="images/calendar add.png" alt=""></div>
                 <div>Add Time</div>
             </ons-button>
-            <ons-button onclick="scanQR();" class="button">
+            <ons-button onclick="scanSearch();" class="button">
                 <div><img src="images/qr-code.png" alt=""></div>
                 <div>Search with QR Code</div>
             </ons-button>
@@ -64,7 +64,12 @@
     <script>
       document.getElementById("appname").innerHTML="ชื่อ "+localStorage.getItem("Email")
         function scanQR() {
+          localStorage.removeItem("pr")
+          localStorage.removeItem("lp")
             window.location.href = 'scan.html';
+        }
+        function scanSearch(){
+          window.location.href = 'scanSearch.html';
         }
         var showTemplateDialog = function () {
             var dialog = document.getElementById('my-dialog');
@@ -88,13 +93,15 @@
                 .hide();
         };
         function search(){
-            var licensPlate = document.getElementById('licensPlate').value;
-            var province = document.getElementById('province').value;
+            var licensPlate = document.getElementById('licensPlate').value
+            localStorage.setItem("searchData1",licensPlate)
+            var province = document.getElementById('province').value
+            localStorage.setItem("searchData2",province)
             console.log("licensPlate: " + licensPlate);
             console.log("province: " + province);
             hideDialog('my-dialog');
             emptyString();
-            window.location.href = 'result.html';
+            window.location.href = 'result2.html';
         }
     </script>
 </body>
