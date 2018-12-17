@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Kanit" rel="stylesheet">
+    <title>Home</title>
+</head>
+
+<body>
+    <ons-page>
+        <ons-toolbar>
+            <div class="left" id="appname" style="margin-left: 10px;"></div>
+            <div class="right" style="margin-right: 10px">
+                <a href="signout.html">Logout</a>
+            </div>
+        </ons-toolbar>
+        <div style="margin: auto; right: 0; left: 0; position: absolute; width: 250px;">
+            <ons-button onclick="" class="button">
+                <div><img src="images/calendar add.png" alt=""></div>
+                <div>Add Time</div>
+            </ons-button>
+            <ons-button onclick="scanQR();" class="button">
+                <div><img src="images/qr-code.png" alt=""></div>
+                <div>Search with QR Code</div>
+            </ons-button>
+            <ons-button onclick="showTemplateDialog()" class="button">
+                <div><img src="images/job.png" alt=""></div>
+                <div>Search</div>
+            </ons-button>
+        </div>
+    </ons-page>
+
+    <template id="dialog.html">
+        <ons-dialog id="my-dialog">
+            <div style="text-align: center; padding: 10px;">
+                <p>
+                    <b>Search owner</b>
+                </p>
+                <p>
+                    Example <br>
+                    กกก999 / 1กก9999
+                </p>
+                <p>
+                    <ons-input id="licensPlate" placeholder="Licens Plate" modifier="transparent" float required></ons-input>
+                </p>
+                <p>
+                    <ons-input id="province" placeholder="Province" modifier="transparent" float></ons-input>
+                </p>
+                <p>
+                    <ons-button onclick="search();">Search</ons-button>
+                    <ons-button onclick="hideDialog('my-dialog')" style="background: gray">Cancel</ons-button>
+                </p>
+            </div>
+        </ons-dialog>
+    </template>
+
+    <script>
+      document.getElementById("appname").innerHTML="ชื่อ "+localStorage.getItem("Email")
+        function scanQR() {
+            window.location.href = 'scan.html';
+        }
+        var showTemplateDialog = function () {
+            var dialog = document.getElementById('my-dialog');
+            if (dialog) {
+                dialog.show();
+            } else {
+                ons.createElement('dialog.html', { append: true })
+                    .then(function (dialog) {
+                        dialog.show();
+                    });
+            }
+        };
+        function emptyString(){
+            document.getElementById('licensPlate').value = "";
+            document.getElementById('province').value = "";
+        }
+        function hideDialog(id) {
+            emptyString();
+            document
+                .getElementById(id)
+                .hide();
+        };
+        function search(){
+            var licensPlate = document.getElementById('licensPlate').value;
+            var province = document.getElementById('province').value;
+            console.log("licensPlate: " + licensPlate);
+            console.log("province: " + province);
+            hideDialog('my-dialog');
+            emptyString();
+            window.location.href = 'result.html';
+        }
+    </script>
+</body>
+
+</html>

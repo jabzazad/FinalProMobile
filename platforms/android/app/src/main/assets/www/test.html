@@ -1,0 +1,204 @@
+<head>
+        <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+        <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+        <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+        <script src="ejs.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-firestore.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Kanit" rel="stylesheet">
+      
+      
+        <script>
+          // Initialize Firebase
+          var config = {
+            apiKey: "AIzaSyDNxJ24X3up079PfQmdPOAxz3HyG3lRP0w",
+            authDomain: "psuregistration.firebaseapp.com",
+            databaseURL: "https://psuregistration.firebaseio.com",
+            projectId: "psuregistration",
+            storageBucket: "psuregistration.appspot.com",
+            messagingSenderId: "419447785809"
+          };
+          firebase.initializeApp(config);
+        </script>
+      
+        <body>
+          <ons-page>
+            <ons-toolbar>
+              <div class="left" id="appname" style="margin-left: 10px;">ชื่อ username</div>
+              <div class="right" style="margin-right: 10px">
+                <a href="login.html">Logout</a>
+              </div>
+            </ons-toolbar>
+            <div style="margin: auto; right: 0; left: 0; position: absolute; width: 250px;">
+              <ons-button onclick="" class="button">
+                <div>
+                  <img src="images/calendar add.png" alt="">
+                </div>
+                <div>Add Time</div>
+              </ons-button>
+              <ons-button onclick="scanQR();" class="button">
+                <div>
+                  <img src="images/qr-code.png" alt="">
+                </div>
+                <div>Search with QR Code</div>
+              </ons-button>
+              <ons-button onclick="showTemplateDialog()" class="button">
+                <div>
+                  <img src="images/job.png" alt="">
+                </div>
+                <div>Search</div>
+              </ons-button>
+            </div>
+          </ons-page>
+      
+          <template id="dialog.html">
+            <ons-dialog id="my-dialog">
+              <div style="text-align: center; padding: 10px;">
+                <p>
+                  <b>Search owner</b>
+                </p>
+                <p>
+                  Example
+                  <br> กกก999 / 1กก9999
+                </p>
+                <p>
+                  <ons-input id="licensPlate" placeholder="Licens Plate" modifier="transparent" float required></ons-input>
+                </p>
+                <p>
+                  <ons-input id="province" placeholder="Province" modifier="transparent" float></ons-input>
+                </p>
+                <p>
+                  <ons-button onclick="search();">Search</ons-button>
+                  <ons-button onclick="hideDialog('my-dialog')" style="background: gray">Cancel</ons-button>
+                </p>
+              </div>
+            </ons-dialog>
+          </template>
+      
+          <template id="detailP.html">
+      
+            <ons-page>
+              <ons-toolbar>
+                <div class="left" style="margin-left: 10px">
+                  <a href="index.html">Back</a>
+                </div>
+                <div class="center">Owner Deatail</div>
+              </ons-toolbar>
+              <div id="showDep"></div>
+      
+              <script id="Detailproduct_template" type="text/template">
+      
+                           <% dataDep.forEach(function(dataDep){   
+                                  var data = dataDep.data(); %>
+                          <ons-card>
+                              <div class="title" style="text-align:center;">
+                                  <b>Car Detail</b>
+                              </div>
+                              <div style="font-size: 15pt;">
+                                  <ons-list-item><b>Type:&nbsp;</b><%= data.Cartype %></ons-list-item>
+                                  <ons-list-item><b>Brand:&nbsp;</b><%= data.Brand %></ons-list-item>
+                                  <ons-list-item><b>Color:&nbsp;</b><%= data.Color %></ons-list-item>
+                                  <ons-list-item><b>Licens Plate:&nbsp;</b> <%= data.LicensPlate %></ons-list-item>
+                              </div>
+                          </ons-card>
+                          <ons-card>
+                              <div class="title" style="text-align:center;">
+                                  <b>Owner Detail</b>
+                              </div>
+                              <div style="font-size: 16pt;">
+                                  <ons-list-item><b>Type:&nbsp;</b><%= data.Type %></ons-list-item>
+                                  <ons-list-item><b>Name:&nbsp;</b> <%= data.Name %></ons-list-item>
+                                  <ons-list-item><b>Tel: <%= data.Tel %></b></ons-list-item>
+                                  <ons-list-item><b>Major:&nbsp;</b> <%= data.Major %></ons-list-item>
+                                  <ons-list-item><b>Faculty:&nbsp;</b> <%= data.Faculty %> </ons-list-item>
+                              </div>
+                              
+                          </ons-card>
+                          <%})%>
+                      
+                 </script>
+            </ons-page>
+      
+          </template>
+          <ons-modal direction="up">
+            <div style="text-align: center">
+              <p>
+                <ons-icon icon="md-spinner" size="28px" spin></ons-icon> Loading...
+              </p>
+            </div>
+          </ons-modal>
+      
+          <script>
+            runArray();
+      
+            const data = [];
+      
+            function runArray() {
+              console.log(search);
+              db.collection("User").get()
+                .then(function (querySnapshot) {
+      
+                  querySnapshot.docs.forEach(function (item) {
+                    data.push(item)
+                    console.log(data)
+                  });
+      
+                })
+            }
+      
+            var showTemplateDialog = function () {
+              var dialog = document.getElementById('my-dialog');
+              if (dialog) {
+                dialog.show();
+              } else {
+                ons.createElement('dialog.html', { append: true })
+                  .then(function (dialog) {
+                    dialog.show();
+                  });
+              }
+            };
+      
+            function emptyString() {
+              document.getElementById('licensPlate').value = "";
+              document.getElementById('province').value = "";
+            }
+      
+            function hideDialog(id) {
+              emptyString();
+              document
+                .getElementById(id)
+                .hide();
+            };
+      
+            function search() {
+              var licensPlate = document.getElementById('licensPlate').value;
+              var province = document.getElementById('province').value;
+              console.log("licensPlate: " + licensPlate);
+              console.log("province: " + province);
+              hideDialog('my-dialog');
+              localStorage.setItem("getDep", licensPlate)
+              showDetailP();
+              myNavigator.pushPage('detailP.html');
+              var modal = document.querySelector('ons-modal');
+              modal.show();
+              setTimeout(function () {
+                modal.hide();
+              }, 1000);
+            }
+      
+            function showDetailP() {
+              var LicensPlate = localStorage.getItem('getDep');
+              var apr = db.collection("User").where("LicensPlate", "==", LicensPlate);
+              apr.get().then(function (querySnapshot) {
+                var Detailproduct_template = $('#Detailproduct_template').html();
+                var html = ejs.render(Detailproduct_template, { dataDep: querySnapshot.docs });
+                $('#showDep').html(html);
+              })
+      
+            }
+          </script>
+        </body>
+      
+      </html>

@@ -1,0 +1,32 @@
+*{
+    font-family: 'Kanit', sans-serif;
+}
+
+.center-div {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 250px;
+    height: 250px;
+    /* border: 2px solid white; */
+}
+
+.button{
+    padding:10px; 
+    background: #133B6C; 
+    border-bottom-right-radius: 20px; 
+    border-top-left-radius: 10px; 
+    margin: auto;
+    margin-top: 10px;
+    width: 250px;
+    text-align: center;
+}
+
+.card{
+    border-bottom-right-radius: 40px; 
+    border-top-left-radius: 20px;
+    border: 2px solid #133B6C;
+}

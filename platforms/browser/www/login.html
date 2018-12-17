@@ -1,116 +1,62 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <title>Login</title>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
-  <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
-  <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-    crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-    crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-    crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
-
-  <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase.js"></script>
-
-  <script src="ejs.js"></script>
-  <script>
-    // Initialize Firebase
-    var config = {
-      apiKey: "AIzaSyB09R7PDBsVJzVNAdy1cwMm6NE4haH8XWU",
-      authDomain: "shopy-bb1b2.firebaseapp.com",
-    };
-    firebase.initializeApp(config);
-  </script>
-
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B"
-    crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsenui.css">
+    <link rel="stylesheet" href="https://unpkg.com/onsenui/css/onsen-css-components.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/onsenui/js/onsenui.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Kanit" rel="stylesheet">
+    <style>
+        .page--full_bg__background {
+            background: url('images/trianglify.png');
+            background-size: 100% 100%;
+        }
+        .inputBox{
+            /* border: 2px solid white;  */
+            padding:10px; 
+            background: white; 
+            border-bottom-right-radius: 20px; 
+            border-top-left-radius: 10px; 
+            /* opacity: 0.5;  */
+            margin: auto;
+            margin-top: 10px;
+        }
+    </style>
+    <title>Login</title>
+    <script src="https://www.gstatic.com/firebasejs/5.7.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDNxJ24X3up079PfQmdPOAxz3HyG3lRP0w",
+    authDomain: "psuregistration.firebaseapp.com",
+    databaseURL: "https://psuregistration.firebaseio.com",
+    projectId: "psuregistration",
+    storageBucket: "psuregistration.appspot.com",
+    messagingSenderId: "419447785809"
+  };
+  firebase.initializeApp(config);
+</script>
 </head>
 
 <body>
-  <ons-page>
-    <div style="text-align: center; margin-top: 30px;">
-      <p>
-        <ons-input id="username" modifier="underbar" placeholder="Username" float></ons-input>
-      </p>
-      <p>
-        <ons-input id="password" modifier="underbar" type="password" placeholder="Password" float></ons-input>
-      </p>
-      <p style="margin-top: 30px;">
-        <ons-button onclick="login()">Sign in</ons-button>
-      </p>
-      <p style="margin-top: 30px;">
-        <ons-button onclick="google()">Google Login</ons-button>
-      </p>
-      <p style="margin-top: 30px;">
-          <ons-button onclick="facebook()">Facebook Login</ons-button>
-        </p>
-      <p>
-        <a href="register.html">Register</a>
-      </p>
-    </div>
-  </ons-page>
-  <script>
-    function facebook(){
-      var provider = new firebase.auth.FacebookAuthProvider();
-      firebase.auth().signInWithRedirect(provider);
-      firebase.auth().getRedirectResult().then(function(result) {
-  if (result.credential) {
-    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-    var token = result.credential.accessToken;
-    // ...
-  } 
-  // The signed-in user info.
-  var user = result.user;
-}).catch(function(error) {
-  // Handle Errors here.
-  var errorCode = error.code;
-  var errorMessage = error.message;
-  // The email of the user's account used.
-  var email = error.email;
-  // The firebase.auth.AuthCredential type that was used.
-  var credential = error.credential;
-  // ...
-});
-    }
-    function google() {
-      var provider = new firebase.auth.GoogleAuthProvider();
-      provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-      firebase.auth().signInWithRedirect(provider);
-      firebase.auth().getRedirectResult().then(function (result) {
-        if (result.credential) {
-          // This gives you a Google Access Token. You can use it to access the Google API.
-          var token = result.credential.accessToken;
-          // ...
-        }
-        // The signed-in user info.
-        var user = result.user;
-        console.log(user);
-      }).catch(function (error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
-        // ...
-      });
-    }
+    <ons-page id="page1" modifier="full_bg">
+        <div class="center-div">
+            <img src="images/Logo-PSU-TH-01-1024x724.png" style="width: 250px;">
+            <p class="inputBox">
+                <ons-input id="username" placeholder="Username" modifier="transparent" float></ons-input>
+            </p>
+            <p class="inputBox">
+                <ons-input id="password" modifier="transparent" type="password" placeholder="Password" float></ons-input>
+            </p>
+            <ons-button onclick="login()" class="button">Sign in</ons-button>
+        </div>
+    </ons-page>
 
+    <script>
     var login = function () {
       var email = document.getElementById('username').value;
       var password = document.getElementById('password').value;
@@ -120,16 +66,16 @@
         console.log(error.code + " : " + error.message);
         ons.notification.alert('Login failed');
       })
-
       
     };
-
     firebase.auth().onAuthStateChanged(function (user) {
         if (user) {
-          window.location.href = 'product.html';
+          localStorage.setItem("Email",user.email)
+          window.location.href = 'home.html';
         }
       })
-  </script>
+    </script>
+
 </body>
 
 </html>

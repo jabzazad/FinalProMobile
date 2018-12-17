@@ -20,8 +20,12 @@
 <script> 
   // Initialize Firebase
   var config = {
-    apiKey: "AIzaSyB09R7PDBsVJzVNAdy1cwMm6NE4haH8XWU",
-    authDomain: "shopy-bb1b2.firebaseapp.com",    
+    apiKey: "AIzaSyDNxJ24X3up079PfQmdPOAxz3HyG3lRP0w",
+    authDomain: "psuregistration.firebaseapp.com",
+    databaseURL: "https://psuregistration.firebaseio.com",
+    projectId: "psuregistration",
+    storageBucket: "psuregistration.appspot.com",
+    messagingSenderId: "419447785809"
   };
   
   firebase.initializeApp(config);
@@ -47,7 +51,7 @@ db.settings({
  <script>
  firebase.auth().onAuthStateChanged(function(user) {
     if (user) { 
- window.location.href='product.html';
+ window.location.href='home.html';
     } else {
 window.location.href='login.html';
     }
