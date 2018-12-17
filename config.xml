@@ -7,7 +7,7 @@
             <path url="/__/auth/callback" />
         </host>
     </universal-links>
-    <name>hello</name>
+    <name>Vehicle Registration</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
     </description>
@@ -25,6 +25,7 @@
     <allow-intent href="geo:*" />
     <platform name="android">
         <allow-intent href="market:*" />
+        <icon src="./res/icon/android/49062758_325721708028661_1414121967937650688_n.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
